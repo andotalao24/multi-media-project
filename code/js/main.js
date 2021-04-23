@@ -88,7 +88,8 @@ $(document).ready(function() {
 
     // Update button to apply all image processing functions
     $("#output-update").on("click", function() { imageproc.apply(); });
-
+    //todo: Update botton to show the histogram of original image
+    
     // Enable Bootstrap Toggle
     $("input[type=checkbox]").bootstrapToggle();
 
