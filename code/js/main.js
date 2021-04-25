@@ -2,15 +2,6 @@
 // Currently selected basic operation
 var currentBasicOp = "no-op";
 
-// Currently selected base layer operation
-//var currentBaseLayerOp = "no-op";
-
-// Currently selected shade layer operation
-//var currentShadeLayerOp = "no-op";
-
-// Currently selected outline layer operation
-//var currentOutlineLayerOp = "no-op";
-
 // Event handler for the 'click' event of the tabs
 // The main goal of this handler is to improve the user experience by adding
 // the behaviour of switching tab when the tab is clicked, in additional to
@@ -81,15 +72,15 @@ function changeTabs(e) {
 $(document).ready(function() {
     // Initialize the imageproc module.
     // Get ready for the canvas area and automatically load the input image
-    imageproc.init("input", "output", "input-image");
+    imageproc.init("input", "output", "histoInput","histoOutput","input-image");
 
     // Update the input image when the selection is changed
     $("#input-image").on("change", function() { imageproc.updateInputImage(); });
 
     // Update button to apply all image processing functions
     $("#output-update").on("click", function() { imageproc.apply(); });
-    //todo: Update botton to show the histogram of original image
-    
+    //Update botton to show the histogram of original image
+    $("#histoInput-update").on("click", function(){imageproc.showInputHistogram(); });
     // Enable Bootstrap Toggle
     $("input[type=checkbox]").bootstrapToggle();
 

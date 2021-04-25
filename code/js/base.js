@@ -70,16 +70,10 @@
     /*
      * Find the min and max of the histogram
      */
-    function findMinMax(histogram, pixelsToIgnore) {//----------------------question here dismatch with the ans
+    function findMinMax(histogram, pixelsToIgnore) {
         var min = 0, max = 255;
-
-        /**
-         * TODO: You need to build the histogram here
-         */
-
         // Find the minimum in the histogram with non-zero value by
         // ignoring the number of pixels given by pixelsToIgnore
-       
         // Find the maximum in the histogram with non-zero value by
         // ignoring the number of pixels given by pixelsToIgnore
         var start=0;
@@ -151,9 +145,9 @@
              minMax = findMinMax(histogram, pixelsToIgnore);
              var ming = minMax.min, maxg = minMax.max, rangeg = maxg - ming;
 
-    histogram = buildHistogram(inputData, "blue");
- minMax = findMinMax(histogram, pixelsToIgnore);
-                                       var minb = minMax.min, maxb = minMax.max, rangeb = maxb - minb;
+            histogram = buildHistogram(inputData, "blue");
+            minMax = findMinMax(histogram, pixelsToIgnore);
+            var minb = minMax.min, maxb = minMax.max, rangeb = maxb - minb;
 
             for (var i = 0; i < inputData.data.length; i += 4) {
                 // Adjust each channel based on the histogram of each one

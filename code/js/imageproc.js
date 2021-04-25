@@ -3,6 +3,9 @@
 // imageproc.js will be used by main.js
 // imageproc.js will call functions in layers.js to handle specific processment of images
     var input, output;
+    var inputHisto,outputHisto;
+    var inputImage, outputImage;
+    var outputHistogram, inputHistogram;
     var imageSelector;
 
     imageproc.operation = null;
@@ -12,9 +15,29 @@
      */
     imageproc.init = function(inputCanvasId,
                               outputCanvasId,
+                              inputHistogramId,
+                              outputHistogramId,
                               inputImageId) {
+        //get the canvas 
         input  = $("#" + inputCanvasId).get(0).getContext("2d");
         output = $("#" + outputCanvasId).get(0).getContext("2d");
+        inputHisto  = $("#" + inputHistogramId).get(0).getContext("2d");
+        outputHisto = $("#" + outputHistogramId).get(0).getContext("2d");
+
+        //get the content of the input image 
+        inputImage = input.getImageData(0, 0,
+                         input.canvas.clientWidth, input.canvas.clientHeight);
+        //buffer to store actual values to show on each canvas
+        //
+        outputImage = output.createImageData(input.canvas.clientWidth,
+                                                 input.canvas.clientHeight);
+
+
+        inputHistogram = inputHisto.createImageData(input.canvas.clientWidth,
+                                                 input.canvas.clientHeight);
+        outputHistogram = outputHisto.createImageData(input.canvas.clientWidth,
+                                                 input.canvas.clientHeight);
+
 
         imageSelector = $("#" + inputImageId);
         imageproc.updateInputImage();
@@ -31,16 +54,31 @@
         image.src = "images/" + imageSelector.val();
     }
 
+
+
+    /*
+     * show the histogram of the input Image 
+     */
+    imageproc.showInputHistogram =function(){
+        
+        //function call to fill up inputHistogram 
+        imageproc.getHistogram(inputImage,inputHistogram);
+        //how to show histogram on canvas with js
+        //inputHisto.putImageData(inputHistogram,0,0);
+    }
+
+
+
+
+    
     /*
      * Apply an image processing operation to an input image and
      * then put the output image in the output canvas
+     * ***new feature***
+     * we also need to put the output histogram in another output canvas
      */
     imageproc.apply = function() {
-        // Get the input image and create the output image buffer
-        var inputImage = input.getImageData(0, 0,
-                         input.canvas.clientWidth, input.canvas.clientHeight);
-        var outputImage = output.createImageData(input.canvas.clientWidth,
-                                                 input.canvas.clientHeight);
+       
 
         // Update the alpha values of the newly created image
         for (var i = 0; i < outputImage.data.length; i+=4)
@@ -49,10 +87,14 @@
         if (imageproc.operation) {
             // Apply the operation
             imageproc.operation(inputImage, outputImage);
+            imageproc.getHistogram(outputImage,outputHistogram)
         }
 
         // Put the output image in the canvas
+        //output is canvas, start from the left top corner
         output.putImageData(outputImage, 0, 0);
+
+        //outputHisto.putImageData(outputHistogram,0,0);
     }
 
     /*
