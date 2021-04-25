@@ -13,9 +13,10 @@
     body { min-width: 1020px; }
     .main { min-width: 1020px; width: 1020px; margin-top: 10px; }
     .container-fluid { margin-top: 10px; }
-    .nav-item { width: 25%; }
+    .nav-item { width: 100%; }
     .nav-tabs, .nav-tabs .dropdown-item { font-size: 14px; }
     .toggle { height: 38px !important; }
+    .dropdown-menu {width: 100%;}
     canvas { border: 1px solid black; }
     </style>
 </head>
@@ -30,7 +31,7 @@
         <div class="row">
             <div class="col-6">
                 <h5>Input Image</h5>
-                <canvas id="input" width="480" height="360"></canvas>
+                <canvas id="input" width="400" height="300"></canvas>
                 <div class="form-inline">
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">Image</span></div>
@@ -51,34 +52,48 @@
             </div>
             <div class="col-6">
                 <h5>Output Image</h5>
-                <canvas id="output" width="480" height="360"></canvas>
+                <canvas id="output" width="400" height="300"></canvas>
                 <div class="form-inline">
                     <button id="output-update" class="btn btn-info"><i class="fas fa-sync"></i> Update Output</button>
                 </div>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-6">
+                <h5>Input Histogram</h5>
+                <canvas id="histoInput" width="400" height="300"></canvas>
+                <button id="histoInput-update" class="btn btn-info"><i class="fas fa-sync"></i>Show Histogram</button>
+            </div>
+            <div class="col-6">
+                <h5>Output Histogram</h5>
+                <canvas id="histoOutput" width="400" height="300"></canvas>
+                <div class="form-inline"></div>
+            </div>
+        </div>
+
         <div class="row"><div class="container-fluid">&nbsp;</div></div>
       
         <div class="row">
-            <div class="container-fluid">
+        	<div class="col-12">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs nav-fill">
-
-                    <!-- Basic processing -->
-                    <li class="nav-item dropdown" id="basic-dropdown">
-                        <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#">Histogram processing<br><span class="title"><i>Do Nothing</i></span>
+              
+                	 <li class="nav-item dropdown" id="basic-dropdown">
+                        <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#">options
+                        	<br>
+                        	<span class="title"><i>Do Nothing</i></span>
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#no-op"><i>Do Nothing</i></a></li>
                             <li><a class="dropdown-item" href="#auto-contrast">Automatic Contrast</a></li>
                         </ul>
                     </li>
-
-                </ul>
-
                 <!-- Tab panes -->
-                <div class="tab-content">
+                
+            	</ul>
+        
+                 <div class="tab-content">
 
                     <!-- No op -->
                     <div class="tab-pane active" id="no-op">
@@ -89,7 +104,7 @@
 
                     <!-- Automatic contrast -->
                     <div class="tab-pane" id="auto-contrast">
-                        <div class="container-fluid">
+                        <div class="container-fluid" >
                             <div class="row">
                                 <div class="col-3">
                                     <label for="auto-contrast-type">Type:</label>
@@ -99,6 +114,13 @@
                                     </select>
                                 </div>
                                 <div class="col-4">
+                                    <label for="processing-type">Type:</label>
+                                    <select class="custom-select" id="processing-type">
+                                        <option value="stretching">Stretching</option>
+                                        <option value="equalization">Equalization</option>
+                                    </select>
+                                </div>
+                                <div class="col-5">
                                     <label for="auto-contrast-percentage">Percentage of pixels to ignore:</label>
                                     <div class="input-group">
                                         <div class="row flex-fill align-items-center mx-0 px-2 border rounded-left">
@@ -112,9 +134,19 @@
                         </div>
                     </div>
 
+                 </div> 
+            </div>
+        </div>
+
 
     </div>
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <br>
 
     <script src="jquery/jquery-3.5.1.min.js"></script>

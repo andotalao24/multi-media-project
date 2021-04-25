@@ -5,17 +5,28 @@
     /*
      * Apply the basic processing operations
      */
+    var type = $("#auto-contrast-type").val();
     function applyBasicOp(inputImage, outputImage) {
         switch (currentBasicOp) {
 
             // Apply automatic contrast
             case "auto-contrast":
-                var type = $("#auto-contrast-type").val();
+                
                 var percentage = parseInt($("#auto-contrast-percentage").val()) / 100.0;
                 imageproc.autoContrast(inputImage, outputImage, type, percentage);
                 break;
         }
     }
+
+
+    //get the histogram from the input image 
+    imageproc.getHistogram =function(inputImage,histogram){
+
+       
+        //histogram.data=imageproc.buildHistogram(inputImage,type);
+    }
+
+
 
 
     /*
