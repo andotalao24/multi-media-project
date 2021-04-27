@@ -17,25 +17,40 @@
     .nav-tabs, .nav-tabs .dropdown-item { font-size: 14px; }
     .toggle { height: 38px !important; }
     .dropdown-menu {width: 100%;}
+    .navbar-text {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  text-align: center;
+  z-index: 10;
+ }
+
+  .btn{background-color:#525287;outline:none; border-style: none;}
+  .btn:active{background-color:#353557;outline:none; border-style: none;}
+  .btn:hover{background-color:#353557;outline:none; border-style: none;}
+  .btn:focus{background-color:#525287;outline:none; border-style: none;}
+
     canvas { border: 1px solid black; }
     </style>
 </head>
-<body>
-    <nav class="navbar navbar-dark bg-dark navbar-fixed-top">
+<body style="background-color: #11111c;">
+    <nav class="navbar border-bottom border-secondary navbar-dark sticky-top" style="background-color: #1c1c29;">
+
         <div class="navbar-header">
             <span class="navbar-brand">Image Processor</span>
         </div>
     </nav>
 
-    <div class="main container">
+    <div class="main container" >
         <div class="row">
             <div class="col-6">
-                <h5>Input Image</h5>
-                <canvas id="input" width="400" height="300"></canvas>
+                <h5 style="color: white">Input Image</h5>
+                <canvas id="input" width="400" height="300" class="rounded" ></canvas>
                 <div class="form-inline">
-                    <div class="input-group">
-                        <div class="input-group-prepend"><span class="input-group-text">Image</span></div>
-                        <select class="custom-select" id="input-image">
+                    <div class="input-group" >
+                        <div class="input-group-prepend" ><span class="input-group-text bg-dark border-0 " style="color: white">Image</span></div>
+                        <select class="custom-select border-dark" id="input-image" style="background-color: #26263c; color: white">
                             <option value="hkust.png">HKUST</option>
                             <option value="justice_league.png">Justice League</option>
                             <option value="wonder_woman.png">Wonder Woman</option>
@@ -51,23 +66,27 @@
                 </div>
             </div>
             <div class="col-6">
-                <h5>Output Image</h5>
-                <canvas id="output" width="400" height="300"></canvas>
+                <h5 style="color: white">Output Image</h5>
+                <canvas id="output" width="400" height="300" class="rounded bg-light" ></canvas>
                 <div class="form-inline">
                     <button id="output-update" class="btn btn-info"><i class="fas fa-sync"></i> Update Output</button>
                 </div>
             </div>
         </div>
-
+        <div class="row"><div class="container-fluid">&nbsp;</div></div>
+      
         <div class="row">
             <div class="col-6">
-                <h5>Input Histogram</h5>
-                <canvas id="histoInput" width="400" height="300"></canvas>
-                <button id="histoInput-update" class="btn btn-info"><i class="fas fa-sync"></i>Show Histogram</button>
+                <div id="input">
+                	<h5 style="color: white" >Original Histogram</h5>
+                	<canvas id="histoInput" width="400" height="300" class="rounded bg-light"></canvas>
+
+            	</div>
+                <button id="histoInput-update" class="btn btn-info"><i class="fas fa-sync"></i> Show Histogram</button>
             </div>
             <div class="col-6">
-                <h5>Output Histogram</h5>
-                <canvas id="histoOutput" width="400" height="300"></canvas>
+                <h5 style="color: white">Output Histogram</h5>
+                <canvas id="histoOutput" width="400" height="300" class="rounded bg-light"></canvas>
                 <div class="form-inline"></div>
             </div>
         </div>
@@ -77,16 +96,16 @@
         <div class="row">
         	<div class="col-12">
                 <!-- Nav tabs -->
-                <ul class="nav nav-tabs nav-fill">
+                <ul class="nav nav-tabs nav-fill ">
               
-                	 <li class="nav-item dropdown" id="basic-dropdown">
-                        <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#">options
+                	 <li class="nav-item  dropdown" id="basic-dropdown">
+                        <a class="nav-link dropdown-toggle active bg-light" data-toggle="dropdown" href="#"style="font-size: 18px;">Options
                         	<br>
-                        	<span class="title"><i>Do Nothing</i></span>
+                        	<span class="title" style="font-size: 15px; "><i>Do Nothing</i></span>
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#no-op"><i>Do Nothing</i></a></li>
-                            <li><a class="dropdown-item" href="#auto-contrast">Automatic Contrast</a></li>
+                            <li><a class="dropdown-item" href="#auto-contrast">Histogram Processing</a></li>
                         </ul>
                     </li>
                 <!-- Tab panes -->
@@ -98,7 +117,7 @@
                     <!-- No op -->
                     <div class="tab-pane active" id="no-op">
                         <div class="container-fluid">
-                            <p>No parameters available</p>
+                            <p style="color: white">No parameters available</p>
                         </div>
                     </div>
 
@@ -107,21 +126,21 @@
                         <div class="container-fluid" >
                             <div class="row">
                                 <div class="col-3">
-                                    <label for="auto-contrast-type">Type:</label>
+                                    <label for="auto-contrast-type" style="color: white">Type:</label>
                                     <select class="custom-select" id="auto-contrast-type">
                                         <option value="gray">Gray Level</option>
                                         <option value="color">Individual Colour</option>
                                     </select>
                                 </div>
                                 <div class="col-4">
-                                    <label for="processing-type">Type:</label>
+                                    <label for="processing-type" style="color: white">Type:</label>
                                     <select class="custom-select" id="processing-type">
                                         <option value="stretching">Stretching</option>
                                         <option value="equalization">Equalization</option>
                                     </select>
                                 </div>
                                 <div class="col-5">
-                                    <label for="auto-contrast-percentage">Percentage of pixels to ignore:</label>
+                                    <label for="auto-contrast-percentage" style="color: white">Percentage of pixels to ignore:</label>
                                     <div class="input-group">
                                         <div class="row flex-fill align-items-center mx-0 px-2 border rounded-left">
                                             <input class="custom-range" id="auto-contrast-percentage" type="range" value="5" min="0" max="50" step="1"
@@ -137,18 +156,14 @@
                  </div> 
             </div>
         </div>
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
+   
     <script src="jquery/jquery-3.5.1.min.js"></script>
     <script src="bootstrap/bootstrap.bundle.min.js"></script>
     <script src="bootstrap/bootstrap4-toggle.min.js"></script>
@@ -158,4 +173,17 @@
     <script src="js/main.js"></script>
     <script src="js/layers.js"></script>
 </body>
+<style>
+ #buttomBar {
+    height: 150px !important; 
+   }
+  </style>
+ <nav class="navbar navbar-dark navbar-fixed-bottom" style="background-color: #26263c;" id="buttomBar" >
+
+        <div class="navbar-text" >
+            author information
+            <br>
+            new sentence
+        </div>
+    </nav>
 </html>
