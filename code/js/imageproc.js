@@ -5,8 +5,7 @@
     var input, output;
     var inputHisto,outputHisto;
 
-    var inputImage, outputImage;
-    var outputHistogram, inputHistogram;
+    
     var imageSelector;
 
     imageproc.operation = null;
@@ -25,24 +24,12 @@
         inputHisto  = $("#" + inputHistogramId).get(0).getContext("2d");
         outputHisto = $("#" + outputHistogramId).get(0).getContext("2d");
 
-        //get the content of the input image 
-        inputImage = input.getImageData(0, 0,
-                         input.canvas.clientWidth, input.canvas.clientHeight);
-        //buffer to store actual values to show on each canvas
-        //
-        outputImage = output.createImageData(input.canvas.clientWidth,
-                                                 input.canvas.clientHeight);
-
-
-        inputHistogram = inputHisto.createImageData(input.canvas.clientWidth,
-                                                 input.canvas.clientHeight);
-        outputHistogram = outputHisto.createImageData(input.canvas.clientWidth,
-                                                 input.canvas.clientHeight);
+        
 
 
         imageSelector = $("#" + inputImageId);
         imageproc.updateInputImage();
-        imageproc.initalizeCanvas();
+        //imageproc.initalizeCanvas();
     }
 
     /*
@@ -51,7 +38,7 @@
     imageproc.updateInputImage = function() {
         var image = new Image();
         image.onload = function () {
-            input.drawImage(image, 0, 0);
+            input.drawImage(image, 0, 0,400,300);
         }
         image.src = "images/" + imageSelector.val();
     }
@@ -91,7 +78,10 @@
      */
     imageproc.apply = function() {
        
-
+        var inputImage = input.getImageData(0, 0,
+            input.canvas.clientWidth, input.canvas.clientHeight);
+        var outputImage = output.createImageData(input.canvas.clientWidth,
+                                    input.canvas.clientHeight);
         // Update the alpha values of the newly created image
         for (var i = 0; i < outputImage.data.length; i+=4)
             outputImage.data[i + 3] = 255;
@@ -99,7 +89,7 @@
         if (imageproc.operation) {
             // Apply the operation
             imageproc.operation(inputImage, outputImage);
-            imageproc.getHistogram(outputImage,outputHistogram)
+            //imageproc.getHistogram(outputImage,outputHistogram)
         }
 
         // Put the output image in the canvas
