@@ -9,10 +9,36 @@
         for (var i = 0; i < 256; i++)
             histogram[i] = 0;
         console.log("building histogram");
+
         /**
          * TODO: You need to build the histogram here
          */
-
+        switch (channel){
+            case "gray":
+                for (var i = 0; i < inputData.data.length; i += 4 ){
+                    var intensity = (inputData.data[i] + inputData.data[i+1] + inputData.data[i+2]) / 3;
+                    intensity = Math.floor(intensity);
+                    histogram[intensity] ++;
+                }
+                console.log(histogram.slice(0, 10).join(","));
+                break;
+            case "red":
+                for (var i = 0; i < inputData.data.length; i += 4 ){
+                    histogram[inputData.data[i] ]  ++;
+                }
+                break;
+            case "green":
+                for (var i = 0; i < inputData.data.length; i += 4 ){
+                    histogram[inputData.data[i+1] ]  ++;
+                }
+                break;
+            case "blue": 
+                for (var i = 0; i < inputData.data.length; i += 4 ){
+                    histogram[inputData.data[i+2] ]  ++;
+                }
+                break;
+        }
+        
         // Accumulate the histogram based on the input channel
         // The input channel can be:
         // "red"   - building a histogram for the red component
@@ -20,50 +46,7 @@
         // "blue"  - building a histogram for the blue component
         // "gray"  - building a histogram for the intensity
         //           (using simple averaging)
-        switch(channel){
-            case"red":
-                    for (var y = 0; y < inputData.height; y++) {
-                                            for (var x = 0; x < inputData.width; x++) {
-                                                var pixel = imageproc.getPixel(inputData, x, y);
-                                                var value = pixel.r;
-                                                histogram[value]++;
-                                                }
-                            }
-                break;
-            case"green":
-                    for (var y = 0; y < inputData.height; y++) {
-                                            for (var x = 0; x < inputData.width; x++) {
-                                                var pixel = imageproc.getPixel(inputData, x, y);
-                                                var value =  pixel.g;
-                                                histogram[value]++;
-                                                }
-                            }
-                break;
-            case"blue":
-                        for (var y = 0; y < inputData.height; y++) {
-                                                for (var x = 0; x < inputData.width; x++) {
-                                                    var pixel = imageproc.getPixel(inputData, x, y);
-                                                    var value =  pixel.b;
-                                                    histogram[value]++;
-                                                    }
-                                }
-                break;
-            case"gray":
-
-                       for (var y = 0; y < inputData.height; y++) {
-                                for (var x = 0; x < inputData.width; x++) {
-                                    var pixel = imageproc.getPixel(inputData, x, y);
-                                    var value = (pixel.r + pixel.g + pixel.b) / 3;
-                                    histogram[value]++;
-                                    }
-                }
-                console.log(histogram.slice(0, 10).join(","));
-                break;
-
-
-        }
-
-
+        
         return histogram;
     }
 
@@ -71,31 +54,47 @@
      * Find the min and max of the histogram
      */
     function findMinMax(histogram, pixelsToIgnore) {
-        var min = 0, max = 255;
+        var min , max ;
+
+        /**
+         * TODO: You need to build the histogram here
+         */
+        var sum =0 ;
         // Find the minimum in the histogram with non-zero value by
         // ignoring the number of pixels given by pixelsToIgnore
+        if (pixelsToIgnore == 0) {
+            for (min = 0; min < 256; min++) {
+                if (histogram[min] > 0) break;
+            }
+        }
+        else {
+            for(min =0; min < 256; min ++){
+                sum = sum + histogram[min];
+                if (sum > pixelsToIgnore){
+                    break;
+                }
+            }
+        }
+
+
         // Find the maximum in the histogram with non-zero value by
         // ignoring the number of pixels given by pixelsToIgnore
-        var start=0;
-        for(;min<255;min++){
-
-               start+=histogram[min];
-               if(start>pixelsToIgnore)
-                    break;
-
+        sum = 0;
+        if (pixelsToIgnore == 0) {
+            for (max = 255; max >= 0; max--){
+                if (histogram[max] > 0) break;
+            }
         }
-        console.log("ignore %d,%d",start,pixelsToIgnore);
-        start=0;
-        for(;max>0;max--){
-
-                        start+=histogram[max];
-                        if(start>pixelsToIgnore)
-                           break;
-
+        else {
+            for(max = 255; max >= 0; max --){
+                sum = sum + histogram[max];
+                if (sum > pixelsToIgnore){
+                    break;
                 }
-        console.log("ignore %d,%d",start,pixelsToIgnore);
+            }
+        }
+        console.log(min ,"and", max);
 
-        console.log("%d,%d",min,max);
         
         return {"min": min, "max": max};
     }
@@ -155,6 +154,67 @@
                 outputData.data[i]     = (inputData.data[i]-minr)/ranger*255;
                 outputData.data[i + 1] = (inputData.data[i + 1]-ming)/rangeg*255;
                 outputData.data[i + 2] = (inputData.data[i + 2]-minb)/rangeb*255;
+            }
+        }
+    }
+
+    imageproc.Equalization = function(inputData, outputData, type, percentage){
+        console.log("Applying histogram equalization");
+        var pixelsToIgnore = (inputData.data.length / 4) * percentage;
+        console.log("pixels to ignore is :",pixelsToIgnore);
+        var minMax;
+        var histogram, cdfhistogram = [];
+        if (type == "gray"){
+            histogram = buildHistogram(inputData, "gray");
+            minMax = findMinMax(histogram, pixelsToIgnore);
+            cdfhistogram[0] = histogram[0];
+            for (var i = 1; i < 256; i ++){
+                cdfhistogram[i] = cdfhistogram[i-1] + histogram[i];
+            }
+            for (var i = 0; i < inputData.data.length; i += 4) {
+                var r, g, b;
+                r = inputData.data[i];
+                g = inputData.data[i+1];
+                b = inputData.data[i+2];
+                outputData.data[i] = cdfhistogram[r] / cdfhistogram[255] * minMax.max;
+                outputData.data[i+1] = cdfhistogram[g] / cdfhistogram[255] * minMax.max;
+                outputData.data[i+2] = cdfhistogram[b] / cdfhistogram[255] * minMax.max;
+            }
+            console.log(cdfhistogram[255]);
+        }
+        
+        else  {
+            var histogram_r = buildHistogram(inputData, "red");
+            var histogram_g = buildHistogram(inputData, "green");
+            var histogram_b = buildHistogram(inputData, "blue");
+            var cdfhistogram_r = [], cdfhistogram_g = [], cdfhistogram_b =[];
+            cdfhistogram_r[0] = histogram_r[0];
+            for (var i = 1; i < 256; i ++){
+                cdfhistogram_r[i] = cdfhistogram_r[i-1] + histogram_r[i];
+            }
+            cdfhistogram_g[0] = histogram_g[0];
+            for (var i = 1; i < 256; i ++){
+                cdfhistogram_g[i] = cdfhistogram_g[i-1] + histogram_g[i];
+            }
+            cdfhistogram_b[0] = histogram_b[0];
+            for (var i = 1; i < 256; i ++){
+                cdfhistogram_b[i] = cdfhistogram_b[i-1] + histogram_b[i];
+            }
+            
+            
+            var minMax_r = findMinMax(histogram_r, pixelsToIgnore);
+            var minMax_g = findMinMax(histogram_g, pixelsToIgnore);
+            var minMax_b = findMinMax(histogram_b, pixelsToIgnore);
+            
+            for (var i = 0; i < inputData.data.length; i += 4) {
+                // Adjust each channel based on the histogram of each one
+
+                r = inputData.data[i];
+                g = inputData.data[i+1];
+                b = inputData.data[i+2];
+                outputData.data[i] = cdfhistogram_r[r] / cdfhistogram_r[255] * minMax_r.max;
+                outputData.data[i+1] = cdfhistogram_g[g] / cdfhistogram_g[255] * minMax_g.max;
+                outputData.data[i+2] = cdfhistogram_b[b] / cdfhistogram_b[255] * minMax_b.max;
             }
         }
     }

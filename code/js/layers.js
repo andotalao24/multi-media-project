@@ -5,15 +5,21 @@
     /*
      * Apply the basic processing operations
      */
-    var type = $("#auto-contrast-type").val();
+    
     function applyBasicOp(inputImage, outputImage) {
         switch (currentBasicOp) {
 
             // Apply automatic contrast
             case "auto-contrast":
-                
+                var type = $("#auto-contrast-type").val();
                 var percentage = parseInt($("#auto-contrast-percentage").val()) / 100.0;
-                imageproc.autoContrast(inputImage, outputImage, type, percentage);
+                if ($("#processing-type").val() == "stretching"){
+                    imageproc.autoContrast(inputImage, outputImage, type, percentage);
+                }
+                else{
+                    imageproc.Equalization(inputImage, outputImage, type, percentage);
+                }
+
                 break;
         }
     }
