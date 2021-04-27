@@ -9,10 +9,36 @@
         for (var i = 0; i < 256; i++)
             histogram[i] = 0;
         console.log("building histogram");
+
         /**
          * TODO: You need to build the histogram here
          */
-
+        switch (channel){
+            case "gray":
+                for (var i = 0; i < inputData.data.length; i += 4 ){
+                    var intensity = (inputData.data[i] + inputData.data[i+1] + inputData.data[i+2]) / 3;
+                    intensity = Math.floor(intensity);
+                    histogram[intensity] ++;
+                }
+                console.log(histogram.slice(0, 10).join(","));
+                break;
+            case "red":
+                for (var i = 0; i < inputData.data.length; i += 4 ){
+                    histogram[inputData.data[i] ]  ++;
+                }
+                break;
+            case "green":
+                for (var i = 0; i < inputData.data.length; i += 4 ){
+                    histogram[inputData.data[i+1] ]  ++;
+                }
+                break;
+            case "blue": 
+                for (var i = 0; i < inputData.data.length; i += 4 ){
+                    histogram[inputData.data[i+2] ]  ++;
+                }
+                break;
+        }
+        
         // Accumulate the histogram based on the input channel
         // The input channel can be:
         // "red"   - building a histogram for the red component
@@ -20,50 +46,7 @@
         // "blue"  - building a histogram for the blue component
         // "gray"  - building a histogram for the intensity
         //           (using simple averaging)
-        switch(channel){
-            case"red":
-                    for (var y = 0; y < inputData.height; y++) {
-                                            for (var x = 0; x < inputData.width; x++) {
-                                                var pixel = imageproc.getPixel(inputData, x, y);
-                                                var value = pixel.r;
-                                                histogram[value]++;
-                                                }
-                            }
-                break;
-            case"green":
-                    for (var y = 0; y < inputData.height; y++) {
-                                            for (var x = 0; x < inputData.width; x++) {
-                                                var pixel = imageproc.getPixel(inputData, x, y);
-                                                var value =  pixel.g;
-                                                histogram[value]++;
-                                                }
-                            }
-                break;
-            case"blue":
-                        for (var y = 0; y < inputData.height; y++) {
-                                                for (var x = 0; x < inputData.width; x++) {
-                                                    var pixel = imageproc.getPixel(inputData, x, y);
-                                                    var value =  pixel.b;
-                                                    histogram[value]++;
-                                                    }
-                                }
-                break;
-            case"gray":
-
-                       for (var y = 0; y < inputData.height; y++) {
-                                for (var x = 0; x < inputData.width; x++) {
-                                    var pixel = imageproc.getPixel(inputData, x, y);
-                                    var value = Math.floor((pixel.r + pixel.g + pixel.b)) / 3;
-                                    histogram[value]++;
-                                    }
-                }
-                console.log(histogram.slice(0, 10).join(","));
-                break;
-
-
-        }
-
-
+        
         return histogram;
     }
 
@@ -178,12 +161,12 @@
     imageproc.Equalization = function(inputData, outputData, type, percentage){
         console.log("Applying histogram equalization");
         var pixelsToIgnore = (inputData.data.length / 4) * percentage;
-
+        console.log("pixels to ignore is :",pixelsToIgnore);
         var minMax;
         var histogram, cdfhistogram = [];
         if (type == "gray"){
             histogram = buildHistogram(inputData, "gray");
-            minMax = findMinMax(histogram, percentage);
+            minMax = findMinMax(histogram, pixelsToIgnore);
             cdfhistogram[0] = histogram[0];
             for (var i = 1; i < 256; i ++){
                 cdfhistogram[i] = cdfhistogram[i-1] + histogram[i];
