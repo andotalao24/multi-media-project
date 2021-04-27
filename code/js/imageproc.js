@@ -4,6 +4,7 @@
 // imageproc.js will call functions in layers.js to handle specific processment of images
     var input, output;
     var inputHisto,outputHisto;
+
     var inputImage, outputImage;
     var outputHistogram, inputHistogram;
     var imageSelector;
@@ -41,6 +42,7 @@
 
         imageSelector = $("#" + inputImageId);
         imageproc.updateInputImage();
+        imageproc.initalizeCanvas();
     }
 
     /*
@@ -54,7 +56,17 @@
         image.src = "images/" + imageSelector.val();
     }
 
+    // show the default image of canvas 
+    imageproc.initalizeCanvas= function() {
+        var image = new Image();
+        image.onload = function () {
+            output.drawImage(image, 0, 0,400,300);
+            inputHisto.drawImage(image, 0, 0,400,300);
+            outputHisto.drawImage(image, 0,0,400,300);
+        }
+        image.src="images/noImage.jpg";
 
+    }
 
     /*
      * show the histogram of the input Image 
