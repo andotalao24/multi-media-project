@@ -25,12 +25,7 @@
     }
 
 
-    //get the histogram from the input image 
-    imageproc.getHistogram =function(inputImage,histogram){
-
-       
-        //histogram.data=imageproc.buildHistogram(inputImage,type);
-    }
+    
 
 
 
