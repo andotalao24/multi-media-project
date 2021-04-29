@@ -88,8 +88,14 @@
     }
     
     imageproc.updateHistogram = function(){
-        imageproc.drawHistogram(inputHisto, input, "gray", "normal");
-        imageproc.drawHistogram(outputHisto, output, "gray", "normal");
+        
+       var channel=document.querySelector('input[name="options1"]:checked');
+       if(channel!=null){
+       imageproc.drawHistogram(inputHisto, input, channel.value, "normal");}
+        else{
+            alert("The channel for histogram is not chosen!");
+       }
+   
     }
 
 
@@ -121,9 +127,16 @@
         // Put the output image in the canvas
         //output is canvas, start from the left top corner
         output.putImageData(outputImage, 0, 0);
-        
 
-        //outputHisto.putImageData(outputHistogram,0,0);
+        var channel=document.querySelector('input[name="options2"]:checked');
+       if(channel!=null){
+       imageproc.drawHistogram(outputHisto, output, channel.value, "normal");}
+        else{
+            alert("The channel for histogram is not chosen!");
+       }
+
+        
+      
     }
 
     /*
