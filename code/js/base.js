@@ -4,7 +4,7 @@
     /*
      * Build the histogram of the image for a channel
      */
-    function buildHistogram(inputData, channel) {
+    imageproc.buildHistogram = function(inputData, channel) {
         var histogram = [];
         for (var i = 0; i < 256; i++)
             histogram[i] = 0;
@@ -111,7 +111,7 @@
         var histogram, minMax;
         if (type == "gray") {
             // Build the grayscale histogram
-            histogram = buildHistogram(inputData, "gray");
+            histogram = imageproc.buildHistogram(inputData, "gray");
 
             // Find the minimum and maximum grayscale values with non-zero pixels
             minMax = findMinMax(histogram, pixelsToIgnore);
@@ -136,15 +136,15 @@
              * TODO: You need to apply the same procedure for each0z RGB channel
              *       based on what you have done for the grayscale version
              */
-             histogram = buildHistogram(inputData, "red");
+             histogram = imageproc.buildHistogram(inputData, "red");
              minMax = findMinMax(histogram, pixelsToIgnore);
              var minr = minMax.min, maxr = minMax.max, ranger = maxr - minr;
 
-             histogram = buildHistogram(inputData, "green");
+             histogram = imageproc.buildHistogram(inputData, "green");
              minMax = findMinMax(histogram, pixelsToIgnore);
              var ming = minMax.min, maxg = minMax.max, rangeg = maxg - ming;
 
-            histogram = buildHistogram(inputData, "blue");
+            histogram = imageproc.buildHistogram(inputData, "blue");
             minMax = findMinMax(histogram, pixelsToIgnore);
             var minb = minMax.min, maxb = minMax.max, rangeb = maxb - minb;
 
@@ -165,7 +165,7 @@
         var minMax;
         var histogram, cdfhistogram = [];
         if (type == "gray"){
-            histogram = buildHistogram(inputData, "gray");
+            histogram = imageproc.buildHistogram(inputData, "gray");
             minMax = findMinMax(histogram, pixelsToIgnore);
             cdfhistogram[0] = histogram[0];
             for (var i = 1; i < 256; i ++){
@@ -176,17 +176,17 @@
                 r = inputData.data[i];
                 g = inputData.data[i+1];
                 b = inputData.data[i+2];
-                outputData.data[i] = cdfhistogram[r] / cdfhistogram[255] * minMax.max;
-                outputData.data[i+1] = cdfhistogram[g] / cdfhistogram[255] * minMax.max;
-                outputData.data[i+2] = cdfhistogram[b] / cdfhistogram[255] * minMax.max;
+                outputData.data[i] = cdfhistogram[r] / cdfhistogram[255] * 255;
+                outputData.data[i+1] = cdfhistogram[g] / cdfhistogram[255] * 255;
+                outputData.data[i+2] = cdfhistogram[b] / cdfhistogram[255] * 255;
             }
             console.log(cdfhistogram[255]);
         }
         
         else  {
-            var histogram_r = buildHistogram(inputData, "red");
-            var histogram_g = buildHistogram(inputData, "green");
-            var histogram_b = buildHistogram(inputData, "blue");
+            var histogram_r = imageproc.buildHistogram(inputData, "red");
+            var histogram_g = imageproc.buildHistogram(inputData, "green");
+            var histogram_b = imageproc.buildHistogram(inputData, "blue");
             var cdfhistogram_r = [], cdfhistogram_g = [], cdfhistogram_b =[];
             cdfhistogram_r[0] = histogram_r[0];
             for (var i = 1; i < 256; i ++){
@@ -212,11 +212,13 @@
                 r = inputData.data[i];
                 g = inputData.data[i+1];
                 b = inputData.data[i+2];
-                outputData.data[i] = cdfhistogram_r[r] / cdfhistogram_r[255] * minMax_r.max;
-                outputData.data[i+1] = cdfhistogram_g[g] / cdfhistogram_g[255] * minMax_g.max;
-                outputData.data[i+2] = cdfhistogram_b[b] / cdfhistogram_b[255] * minMax_b.max;
+                outputData.data[i] = cdfhistogram_r[r] / cdfhistogram_r[255] * 255;
+                outputData.data[i+1] = cdfhistogram_g[g] / cdfhistogram_g[255] * 255;
+                outputData.data[i+2] = cdfhistogram_b[b] / cdfhistogram_b[255] * 255;
             }
         }
     }
+
+    
 
 }(window.imageproc = window.imageproc || {}));

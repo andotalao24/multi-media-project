@@ -29,6 +29,9 @@
 
         imageSelector = $("#" + inputImageId);
         imageproc.updateInputImage();
+        
+        
+
         //imageproc.initalizeCanvas();
     }
 
@@ -41,29 +44,52 @@
             input.drawImage(image, 0, 0,400,300);
         }
         image.src = "images/" + imageSelector.val();
+        
     }
 
-    // show the default image of canvas 
-    imageproc.initalizeCanvas= function() {
-        var image = new Image();
-        image.onload = function () {
-            output.drawImage(image, 0, 0,400,300);
-            inputHisto.drawImage(image, 0, 0,400,300);
-            outputHisto.drawImage(image, 0,0,400,300);
-        }
-        image.src="images/noImage.jpg";
 
-    }
 
     /*
      * show the histogram of the input Image 
      */
-    imageproc.showInputHistogram =function(){
+    imageproc.drawHistogram =function(histocanvas,imagecanvas,channel,type){
+        console.log("Drawing histogram...")
         
-        //function call to fill up inputHistogram 
-        imageproc.getHistogram(inputImage,inputHistogram);
-        //how to show histogram on canvas with js
-        //inputHisto.putImageData(inputHistogram,0,0);
+        var imagedata = imagecanvas.getImageData(0, 0,
+            imagecanvas.canvas.clientWidth, imagecanvas.canvas.clientHeight);
+        var maxValue = 0;
+        var guideheight = 4;
+        var startY = histocanvas.canvas.clientHeight - guideheight;
+        var imageHistogram = imageproc.buildHistogram(imagedata, channel);
+        
+        
+        for(var i = 0; i < 256; i ++){
+            if(imageHistogram[i] > maxValue){
+                maxValue = imageHistogram[i];
+             }
+        }
+        
+        var dx = inputHisto.canvas.clientWidth/ 256;
+        var dy = startY / maxValue;
+        histocanvas.linewidth = dx;
+        histocanvas.fillStyle = "#fff";
+        histocanvas.fillRect(0, 0, histocanvas.canvas.clientWidth, histocanvas.canvas.clientHeight);
+        console.log(dy,"and",dx,"and",startY,"max:",maxValue);
+        for(var i = 0; i < 256; i ++){
+            var x = i * dx;
+            histocanvas.strokeStyle = "#000000";
+            histocanvas.beginPath();
+            histocanvas.moveTo(x, startY);
+            histocanvas.lineTo(x, startY - imageHistogram[i] * dy);
+            histocanvas.closePath();
+            histocanvas.stroke(); 
+        }
+
+    }
+    
+    imageproc.updateHistogram = function(){
+        imageproc.drawHistogram(inputHisto, input, "gray", "normal");
+        imageproc.drawHistogram(outputHisto, output, "gray", "normal");
     }
 
 
@@ -95,6 +121,7 @@
         // Put the output image in the canvas
         //output is canvas, start from the left top corner
         output.putImageData(outputImage, 0, 0);
+        
 
         //outputHisto.putImageData(outputHistogram,0,0);
     }
