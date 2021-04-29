@@ -74,6 +74,8 @@ $(document).ready(function() {
     // Get ready for the canvas area and automatically load the input image
     imageproc.init("input", "output", "histoInput","histoOutput","input-image");
 
+ 
+   
     // Update the input image when the selection is changed
     $("#input-image").on("change", function() { imageproc.updateInputImage(); });
 
@@ -81,6 +83,8 @@ $(document).ready(function() {
     $("#output-update").on("click", function() { imageproc.apply(); });
     //Update botton to show the histogram of original image
     $("#histoInput-update").on("click", function() { imageproc.updateHistogram(); });
+
+    //$("#histoOutput-update").on("click", function() { imageproc.updateHistogram("out"); });
     // Enable Bootstrap Toggle
     $("input[type=checkbox]").bootstrapToggle();
 
