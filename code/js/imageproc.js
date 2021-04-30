@@ -70,14 +70,14 @@
         }
         
         
-        var dx = inputHisto.canvas.clientWidth/ 256;
+        var dx = (inputHisto.canvas.clientWidth - 20)/ 256;
         var dy = startY / maxValue;
         histocanvas.linewidth = dx;
         histocanvas.fillStyle = "#fff";
         histocanvas.fillRect(0, 0, histocanvas.canvas.clientWidth, histocanvas.canvas.clientHeight);
         console.log(dy,"and",dx,"and",startY,"max:",maxValue);
-        for(var i = 0; i < 256; i ++){
-            var x = i * dx;
+        for(var i = 1; i <= 256; i ++){
+            var x = (i+2) * dx;
             histocanvas.strokeStyle = "#000000";
             histocanvas.beginPath();
             histocanvas.moveTo(x, startY);
@@ -93,12 +93,12 @@
                 cdfhistogram[i] = cdfhistogram[i-1] + imageHistogram[i];
             }
             
-            for (var i = 0; i < 255; i ++){
-                var x = i * dx;
+            for (var i = 1; i <= 255; i ++){
+                var x = (i+2) * dx;
                 histocanvas.strokeStyle = "#FF0000";
                 histocanvas.beginPath();
                 histocanvas.moveTo(x, startY - cdfhistogram[i] * dy);
-                histocanvas.lineTo((i+1)*dx, startY - cdfhistogram[i+1] * dy);
+                histocanvas.lineTo((i+3)*dx, startY - cdfhistogram[i+1] * dy);
                 histocanvas.closePath();
                 histocanvas.stroke(); 
             }
