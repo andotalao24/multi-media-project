@@ -149,7 +149,7 @@
 
         var channel=document.querySelector('input[name="options2"]:checked');
        if(channel!=null){
-       imageproc.drawHistogram(outputHisto, output, channel.value, "normal");}
+       imageproc.drawHistogram(outputHisto, output, channel.value, "cdf");}
         else{
             alert("The channel for histogram is not chosen!");
        }
