@@ -53,7 +53,7 @@
      * show the histogram of the input Image 
      */
     imageproc.drawHistogram =function(histocanvas,imagecanvas,channel,type){
-        console.log("Drawing histogram...")
+        console.log("Drawing histogram...");
         
         var imagedata = imagecanvas.getImageData(0, 0,
             imagecanvas.canvas.clientWidth, imagecanvas.canvas.clientHeight);
@@ -68,6 +68,7 @@
                 maxValue = imageHistogram[i];
              }
         }
+        
         
         var dx = inputHisto.canvas.clientWidth/ 256;
         var dy = startY / maxValue;
@@ -84,11 +85,29 @@
             histocanvas.closePath();
             histocanvas.stroke(); 
         }
+        if(type == "cdf"){
+            dy = startY / (histocanvas.canvas.clientWidth * histocanvas.canvas.clientHeight);
+            var cdfhistogram = [];
+            cdfhistogram[0] = imageHistogram[0];
+            for (var i = 1; i < 256; i ++){
+                cdfhistogram[i] = cdfhistogram[i-1] + imageHistogram[i];
+            }
+            
+            for (var i = 0; i < 255; i ++){
+                var x = i * dx;
+                histocanvas.strokeStyle = "#FF0000";
+                histocanvas.beginPath();
+                histocanvas.moveTo(x, startY - cdfhistogram[i] * dy);
+                histocanvas.lineTo((i+1)*dx, startY - cdfhistogram[i+1] * dy);
+                histocanvas.closePath();
+                histocanvas.stroke(); 
+            }
+        }
 
     }
     
     imageproc.updateHistogram = function(){
-        imageproc.drawHistogram(inputHisto, input, "gray", "normal");
+        imageproc.drawHistogram(inputHisto, input, "red", "cdf");
         imageproc.drawHistogram(outputHisto, output, "gray", "normal");
     }
 
