@@ -10,15 +10,17 @@
         switch (currentBasicOp) {
 
             // Apply automatic contrast
-            case "auto-contrast":
-                var type = $("#auto-contrast-type").val();
-                var percentage = parseInt($("#auto-contrast-percentage").val()) / 100.0;
-                if ($("#processing-type").val() == "stretching"){
-                    imageproc.autoContrast(inputImage, outputImage, type, percentage);
-                }
-                else{
-                    imageproc.Equalization(inputImage, outputImage, type, percentage);
-                }
+            case "histoStretch":
+                var type = $("#histoStretch-type").val();
+                var percentage = parseInt($("#histoStretch-percentage").val()) / 100.0;
+                imageproc.autoContrast(inputImage, outputImage, type, percentage);
+             
+
+                break;
+            case "histoEqual":
+                var type = $("#histoEqual-type").val();    
+                 imageproc.Equalization(inputImage, outputImage, type, percentage);
+
 
                 break;
         }

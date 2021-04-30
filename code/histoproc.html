@@ -26,27 +26,73 @@
   z-index: 10;
  }
 
-  .btn{background-color:#525287;outline:none; border-style: none;}
-  .btn:active{background-color:#353557;outline:none; border-style: none;}
-  .btn:hover{background-color:#353557;outline:none; border-style: none;}
-  .btn:focus{background-color:#525287;outline:none; border-style: none;}
 
-    canvas { border: 1px solid black; }
+  .updateButton{background-color:#525287;outline:none; border-style: none;}
+  .updateButton:hover{background-color:#353557;outline:none; border-style: none;}
+  .updateButton:focus{background-color:#353557;outline:none; border-style: none;}
+  .updateButton:active{background-color:#353557;outline:none; border-style: none;}
+
+
+  .defaultBtn{background-color:#525287;
+                padding: 4px;
+                margin-right: 25px;
+                margin-left: 25px;
+                 display: inline-block;
+                 text-align: center;
+                 vertical-align: middle;
+                width:30px;
+                height:30px
+                }
+   .transBtn{background-color: transparent;
+   		   margin-right: 5px;
+   		   width:60px;
+   		   border-style: none;
+   		   border-color:none;
+   }
+   .shd{
+    box-shadow:0 4px 8px 0 rgba(20, 20, 20, 0.2), 0 6px 20px 0 rgba(20, 20, 20, 0.19);
+   }
+   .disBtn{background-color: transparent;
+   		      padding: 4px;
+   		      font-size:9px;
+   		      margin-right: 5px;
+                 display: inline-block;
+                 text-align: center;
+                 vertical-align: middle;
+                width:65px;
+                border: 1px solid transparent;
+                border-color:white;
+                border-radius: 5px;
+
+                
+
+   }
+   .bcg{background-image:url("bcg.jpg");
+      background-position: center top;
+  		  }
+    [type='radio'] {
+display: none;
+}
+    html, body {
+  margin:0px;
+  height:100%;
+}
+
+    canvas { border:none;}
     </style>
 </head>
-<body style="background-color: #11111c;">
-    <nav class="navbar border-bottom border-secondary navbar-dark sticky-top" style="background-color: #1c1c29;">
+<body style="background-color:#11111c">
+    <nav class="navbar border-bottom border-secondary navbar-dark sticky-top " style="background-color: #1c1c29;">
 
         <div class="navbar-header">
             <span class="navbar-brand">Image Processor</span>
         </div>
     </nav>
-
-    <div class="main container" >
+    <div class="main container" style="background-color: #1c1c29; height:100vh;">
         <div class="row">
-            <div class="col-6">
+            <div class="col">
                 <h5 style="color: white">Input Image</h5>
-                <canvas id="input" width="400" height="300" class="rounded" ></canvas>
+                <canvas id="input" width="400" height="300" class="rounded shd" ></canvas>
                 <div class="form-inline">
                     <div class="input-group" >
                         <div class="input-group-prepend" ><span class="input-group-text bg-dark border-0 " style="color: white">Image</span></div>
@@ -65,29 +111,66 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+             <div class="col"></div>
+            <div class="col">
                 <h5 style="color: white">Output Image</h5>
-                <canvas id="output" width="400" height="300" class="rounded bg-light" ></canvas>
-                <div class="form-inline">
-                    <button id="output-update" class="btn btn-info"><i class="fas fa-sync"></i> Update Output</button>
-                </div>
+                <canvas id="output" width="400" height="300" class="rounded bg-light shd" ></canvas>
+               
             </div>
         </div>
         <div class="row"><div class="container-fluid">&nbsp;</div></div>
       
         <div class="row">
-            <div class="col-6">
+            <div class="col">
                 <div id="input">
                 	<h5 style="color: white" >Original Histogram</h5>
-                	<canvas id="histoInput" width="400" height="300" class="rounded bg-light"></canvas>
+                	<canvas id="histoInput" width="400" height="300" class="rounded bg-light shd"></canvas>
 
             	</div>
-                <button id="histoInput-update" class="btn btn-info"><i class="fas fa-sync"></i> Show Histogram</button>
+                <div id="HistoModeIn" data-toggle="buttons">
+                	<label class="disBtn text-white">channel   
+                    </label>
+                    <label class="transBtn btn btn-secondary">
+                        <input type="radio" name="options1" value="gray" > Gray
+                    </label>
+                    <label class="transBtn btn btn-danger">
+                        <input type="radio" name="options1" value="red"> Red
+                    </label>
+                    <label class="transBtn btn btn-success">
+                        <input type="radio" name="options1" value="green"> Green
+                    </label>
+                    <label class="transBtn btn btn-primary">
+                        <input type="radio" name="options1" value="blue"> Blue
+                    </label>
+                </div>
+                <br>
+                <button id="histoInput-update" class="updateButton btn text-white"><i class="fas fa-sync text-white"></i> Show Original Histogram</button>
             </div>
-            <div class="col-6">
+            <div class="col"></div>
+            <div class="col">
                 <h5 style="color: white">Output Histogram</h5>
-                <canvas id="histoOutput" width="400" height="300" class="rounded bg-light"></canvas>
-                <div class="form-inline"></div>
+                <canvas id="histoOutput" width="400" height="300" class="rounded bg-light shd"></canvas>
+
+                 <div id="HistoModeOut" data-toggle="buttons">
+                	<label class="disBtn  text-white">channel   
+                    </label>
+                    <label class="transBtn btn btn-secondary">
+                        <input type="radio" name="options2" value="gray" > Gray
+                    </label>
+                    <label class="transBtn btn btn-danger">
+                        <input type="radio" name="options2" value="red"> Red
+                    </label>
+                    <label class="transBtn btn btn-success">
+                        <input type="radio" name="options2" value="green"> Green
+                    </label>
+                    <label class="transBtn btn btn-primary">
+                        <input type="radio" name="options2" value="blue"> Blue
+                    </label>
+                </div>
+                <br>
+                <div class="form-inline">
+                    <button id="output-update" class="updateButton btn text-white"><i class="fas fa-sync text-white"></i> Update Output and Histogram</button>
+                </div>
             </div>
         </div>
 
@@ -99,13 +182,14 @@
                 <ul class="nav nav-tabs nav-fill ">
               
                 	 <li class="nav-item  dropdown" id="basic-dropdown">
-                        <a class="nav-link dropdown-toggle active bg-light" data-toggle="dropdown" href="#"style="font-size: 18px;">Options
+                        <a class="nav-link dropdown-toggle active bg-light" data-toggle="dropdown" href="#"style="font-size: 18px;">Histogram Processing
                         	<br>
                         	<span class="title" style="font-size: 15px; "><i>Do Nothing</i></span>
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#no-op"><i>Do Nothing</i></a></li>
-                            <li><a class="dropdown-item" href="#auto-contrast">Histogram Processing</a></li>
+                            <li><a class="dropdown-item" href="#histoStretch">Histogram Stretching</a></li>
+                            <li><a class="dropdown-item" href="#histoEqual">Histogram Equalization</a></li>
                         </ul>
                     </li>
                 <!-- Tab panes -->
@@ -122,32 +206,41 @@
                     </div>
 
                     <!-- Automatic contrast -->
-                    <div class="tab-pane" id="auto-contrast">
+                    <div class="tab-pane" id="histoStretch">
                         <div class="container-fluid" >
                             <div class="row">
-                                <div class="col-3">
-                                    <label for="auto-contrast-type" style="color: white">Type:</label>
-                                    <select class="custom-select" id="auto-contrast-type">
+                                <div class="col">
+                                    <label for="histoStretch-type" style="color: white">Type:</label>
+                                    <select class="custom-select" id="histoStretch-type">
                                         <option value="gray">Gray Level</option>
                                         <option value="color">Individual Colour</option>
                                     </select>
                                 </div>
-                                <div class="col-4">
-                                    <label for="processing-type" style="color: white">Type:</label>
-                                    <select class="custom-select" id="processing-type">
-                                        <option value="stretching">Stretching</option>
-                                        <option value="equalization">Equalization</option>
-                                    </select>
-                                </div>
-                                <div class="col-5">
-                                    <label for="auto-contrast-percentage" style="color: white">Percentage of pixels to ignore:</label>
+                                
+                                <div class="col">
+                                    <label for="histoStretch-percentage" style="color: white">Percentage of pixels to ignore:</label>
                                     <div class="input-group">
                                         <div class="row flex-fill align-items-center mx-0 px-2 border rounded-left">
-                                            <input class="custom-range" id="auto-contrast-percentage" type="range" value="5" min="0" max="50" step="1"
+                                            <input class="custom-range" id="histoStretch-percentage" type="range" value="5" min="0" max="50" step="1"
                                              oninput="$(this).parents('.input-group').find('.input-group-text > span').html($(this).val())">
                                         </div>
+								
                                         <div class="input-group-append"><span class="input-group-text d-block" style="width: 4em"><span>5</span>%</span></div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="histoEqual">
+                        <div class="container-fluid" >
+                            <div class="row">
+                                <div class="col">
+                                    <label for="histoEqual-type" style="color: white">Type:</label>
+                                    <select class="custom-select" id="histoEqual-type">
+                                        <option value="gray">Gray Level</option>
+                                        <option value="color">Individual Colour</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -161,6 +254,7 @@
     <br>
     <br>
     <br>
+  
 
     </div>
    
@@ -181,9 +275,9 @@
  <nav class="navbar navbar-dark navbar-fixed-bottom" style="background-color: #26263c;" id="buttomBar" >
 
         <div class="navbar-text" >
-            author information
+            Multimedia Processing Project
             <br>
-            new sentence
+            made by Yuen Hing and ZHAO Jiachen
         </div>
     </nav>
 </html>
