@@ -20,7 +20,7 @@
                     intensity = Math.floor(intensity);
                     histogram[intensity] ++;
                 }
-                console.log(histogram.slice(0, 10).join(","));
+                
                 break;
             case "red":
                 for (var i = 0; i < inputData.data.length; i += 4 ){
@@ -93,7 +93,7 @@
                 }
             }
         }
-        console.log(min ,"and", max);
+        
 
         
         return {"min": min, "max": max};
@@ -158,15 +158,12 @@
         }
     }
 
-    imageproc.Equalization = function(inputData, outputData, type, percentage){
-        console.log("Applying histogram equalization");
-        var pixelsToIgnore = (inputData.data.length / 4) * percentage;
-        console.log("pixels to ignore is :",pixelsToIgnore);
+    imageproc.Equalization = function(inputData, outputData, type){
         var minMax;
         var histogram, cdfhistogram = [];
         if (type == "gray"){
             histogram = imageproc.buildHistogram(inputData, "gray");
-            minMax = findMinMax(histogram, pixelsToIgnore);
+            minMax = findMinMax(histogram, 0);
             cdfhistogram[0] = histogram[0];
             for (var i = 1; i < 256; i ++){
                 cdfhistogram[i] = cdfhistogram[i-1] + histogram[i];
@@ -180,7 +177,7 @@
                 outputData.data[i+1] = cdfhistogram[g] / cdfhistogram[255] * 255;
                 outputData.data[i+2] = cdfhistogram[b] / cdfhistogram[255] * 255;
             }
-            console.log(cdfhistogram[255]);
+            
         }
         
         else  {
@@ -202,9 +199,6 @@
             }
             
             
-            var minMax_r = findMinMax(histogram_r, pixelsToIgnore);
-            var minMax_g = findMinMax(histogram_g, pixelsToIgnore);
-            var minMax_b = findMinMax(histogram_b, pixelsToIgnore);
             
             for (var i = 0; i < inputData.data.length; i += 4) {
                 // Adjust each channel based on the histogram of each one
