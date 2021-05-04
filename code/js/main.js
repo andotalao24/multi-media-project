@@ -78,6 +78,8 @@ $(document).ready(function() {
    
     // Update the input image when the selection is changed
     $("#input-image").on("change", function() { imageproc.updateInputImage(); });
+    // Update the input image when a file is uploaded
+    $("#fileChooser").on("change", function() { imageproc.updateImportImage(); });
 
     // Update button to apply all image processing functions
     $("#output-update").on("click", function() { imageproc.apply(); });

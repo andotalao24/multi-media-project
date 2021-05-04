@@ -47,13 +47,23 @@
         
     }
 
+    imageproc.updateImportImage = function(){
+        var importedfile = document.getElementById('fileChooser').files[0];
+        if (importedfile){
+            var image = new Image();
+            image.onload = function () {
+                input.drawImage(image, 0, 0,400,300);
+            }
+            image.src = window.URL.createObjectURL(importedfile);
+        }
+    }
+
 
 
     /*
      * show the histogram of the input Image 
      */
     imageproc.drawHistogram =function(histocanvas,imagecanvas,channel,type){
-        console.log("Drawing histogram...");
         
         var imagedata = imagecanvas.getImageData(0, 0,
             imagecanvas.canvas.clientWidth, imagecanvas.canvas.clientHeight);
@@ -71,17 +81,17 @@
         
         
         var dx = (inputHisto.canvas.clientWidth - 20)/ 256;
-        var dy = startY / maxValue;
+        var dy = startY / maxValue ;
         histocanvas.linewidth = dx;
         histocanvas.fillStyle = "#fff";
         histocanvas.fillRect(0, 0, histocanvas.canvas.clientWidth, histocanvas.canvas.clientHeight);
-        console.log(dy,"and",dx,"and",startY,"max:",maxValue);
+        
         for(var i = 1; i <= 256; i ++){
-            var x = (i+2) * dx;
+            var x = (i+7) * dx;
             histocanvas.strokeStyle = "#000000";
             histocanvas.beginPath();
             histocanvas.moveTo(x, startY);
-            histocanvas.lineTo(x, startY - imageHistogram[i] * dy);
+            histocanvas.lineTo(x, startY - imageHistogram[i-1] * dy);
             histocanvas.closePath();
             histocanvas.stroke(); 
         }
@@ -93,12 +103,12 @@
                 cdfhistogram[i] = cdfhistogram[i-1] + imageHistogram[i];
             }
             
-            for (var i = 1; i <= 255; i ++){
-                var x = (i+2) * dx;
+            for (var i = 1; i < 256; i ++){
+                var x = (i+7) * dx;
                 histocanvas.strokeStyle = "#FF0000";
                 histocanvas.beginPath();
-                histocanvas.moveTo(x, startY - cdfhistogram[i] * dy);
-                histocanvas.lineTo((i+3)*dx, startY - cdfhistogram[i+1] * dy);
+                histocanvas.moveTo(x, startY - cdfhistogram[i-1] * dy);
+                histocanvas.lineTo((i+8)*dx, startY - cdfhistogram[i] * dy);
                 histocanvas.closePath();
                 histocanvas.stroke(); 
             }

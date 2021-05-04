@@ -19,7 +19,7 @@
                 break;
             case "histoEqual":
                 var type = $("#histoEqual-type").val();    
-                 imageproc.Equalization(inputImage, outputImage, type, percentage);
+                 imageproc.Equalization(inputImage, outputImage, type);
 
 
                 break;
